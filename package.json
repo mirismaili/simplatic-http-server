@@ -1,0 +1,40 @@
+{
+  "name": "simplatic-http-server",
+  "version": "0.0.0",
+  "description": "",
+  "main": "main.umd.js",
+  "bin": {
+    "serve": "main.umd.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mirismaili/text-wrapper.git"
+  },
+  "keywords": [
+    "simple-static-http-server",
+    "simple-http-server",
+    "very-simple-http-server",
+    "light-http-server",
+    "light-weight-http-server",
+    "too-light-http-server",
+    "static-http-server",
+    "http-server",
+    "server",
+    "http",
+    "promise",
+    "dev4dev"
+  ],
+  "author": "S. M. Mir-Ismaili <s.m.mirismaili@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mirismaili/text-wrapper/issues"
+  },
+  "//": "devDependencies: `@types/node` is needed to be in dependencies due to some notes in IntelliJ IDEs. See: https://intellij-support.jetbrains.com/hc/en-us/community/posts/206324989/comments/360000603579",
+  "devDependencies": {
+    "@types/node": "^12.0.10"
+  },
+  "dependencies": {}
+}
