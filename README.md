@@ -16,6 +16,9 @@
 		<img src="https://david-dm.org/mirismaili/simplatic-http-server/dev-status.svg" alt="devDependency Status">
 	</a>
 	<br>
+	<a href="http://commitizen.github.io/cz-cli/">
+		<img alt="Commitizen friendly" src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg">
+	</a>
 	<a href="https://github.com/mirismaili/simplatic-http-server/fork">
 		<img src="https://img.shields.io/github/forks/mirismaili/simplatic-http-server.svg?style=social" alt="GitHub forks">
 	</a>
