@@ -2,12 +2,18 @@
   "name": "simplatic-http-server",
   "version": "0.0.0",
   "description": "",
-  "main": "main.umd.js",
+  "main": "dist/main.umd.js",
   "bin": {
-    "serve": "main.umd.js"
+    "serve": "dist/main.umd.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "rimraf dist",
+    "build": "rollup --config",
+    "build:ugligy": "npm run build -- --environment UGLIFY",
+    "build:watch": "npm run build -- --watch",
+    "build:prod": "npm run build -- --environment BUILD:production",
+    "build:prod0": "npm run build -- --environment BUILD:production,UGLIFY:false"
   },
   "repository": {
     "type": "git",
@@ -32,9 +38,26 @@
   "bugs": {
     "url": "https://github.com/mirismaili/text-wrapper/issues"
   },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
   "//": "devDependencies: `@types/node` is needed to be in dependencies due to some notes in IntelliJ IDEs. See: https://intellij-support.jetbrains.com/hc/en-us/community/posts/206324989/comments/360000603579",
   "devDependencies": {
-    "@types/node": "^12.0.10"
+    "@types/node": "^12.0.10",
+    "builtin-modules": "^3.1.0",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.snakecase": "^4.1.1",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.12.2",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-terser": "^5.0.0",
+    "rollup-plugin-typescript2": "^0.21.1",
+    "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.5.2"
   },
   "dependencies": {}
 }

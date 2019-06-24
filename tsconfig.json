@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"outDir": "tsc-out",
+		"noImplicitAny": true,
+		"lib": [
+			"es2018"
+		],
+		"module": "es2015",
+		"moduleResolution": "node",
+		"target": "es6",
+		"strict": true,
+		"sourceMap": true,
+		"declaration": true,
+		"declarationDir": "dist/types",
+		"allowSyntheticDefaultImports": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true
+	},
+	"include": [
+		"src"
+	]
+}

@@ -1,0 +1,13 @@
+{
+  "rules": {
+    "label-position": false,
+	 "no-empty": [true, "allow-empty-functions"],
+    "curly": false,
+    "one-variable-per-declaration": [true, "ignore-for-loop"],
+    "comment-format": [false, "check-space", {"ignore-pattern": "[*-]{10}"}]
+  },
+  "extends": [
+    "tslint-config-standard",
+    "tslint-config-prettier"
+  ]
+}
