@@ -1,6 +1,6 @@
 {
   "name": "simplatic-http-server",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A very light-weight and very simple static HTTP server based on node's built-in http module",
   "main": "dist/main.umd.js",
   "bin": {

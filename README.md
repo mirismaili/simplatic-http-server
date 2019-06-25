@@ -34,7 +34,3 @@
 **Simple Static Http Server**
 
 A very light-weight and very simple static HTTP server based on [*node.js*'s built-in `http` module](https://nodejs.org/api/http.html) 
-
-***
-
-*Building ...*
