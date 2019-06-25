@@ -1,13 +1,14 @@
 {
   "name": "simplatic-http-server",
   "version": "0.0.0",
-  "description": "",
+  "description": "A very light-weight and very simple static HTTP server based on node's built-in http module",
   "main": "dist/main.umd.js",
   "bin": {
     "serve": "dist/main.umd.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:e2e": "mocha --config .mocharc.js",
+    "prepublishOnly": "npm run build:prod && npm run test:e2e",
     "prebuild": "rimraf dist",
     "build": "rollup --config",
     "build:ugligy": "npm run build -- --environment UGLIFY",
@@ -42,12 +43,18 @@
     "semi": false,
     "singleQuote": true
   },
-  "//": "devDependencies: `@types/node` is needed to be in dependencies due to some notes in IntelliJ IDEs. See: https://intellij-support.jetbrains.com/hc/en-us/community/posts/206324989/comments/360000603579",
+  "//": "devDependencies: `@types/...` is needed to be in dependencies due to some notes in IntelliJ IDEs. See: https://intellij-support.jetbrains.com/hc/en-us/community/posts/206324989/comments/360000603579",
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^12.0.10",
+    "@types/puppeteer": "~1.12.4",
     "builtin-modules": "^3.1.0",
+    "chai": "^4.2.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.snakecase": "^4.1.1",
+    "mocha": "^6.1.4",
+    "puppeteer": "~1.17.0",
     "rimraf": "^2.6.3",
     "rollup": "^1.12.2",
     "rollup-plugin-commonjs": "^10.0.0",
