@@ -7,7 +7,7 @@
     "serve": "dist/main.umd.js"
   },
   "scripts": {
-    "test:e2e": "mocha --config .mocharc.js",
+    "test:e2e": "mocha --config .mocharc.json",
     "prepublishOnly": "npm run build:prod && npm run test:e2e",
     "prebuild": "rimraf dist",
     "build": "rollup --config",
