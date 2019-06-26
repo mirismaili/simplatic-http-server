@@ -8,9 +8,15 @@ const puppeteer = require('puppeteer')
 const {expect} = require('chai')
 const StaticServer = require('../dist/main.umd.js')
 
-const mockPageUrl = 'http://127.0.0.1:3000/mocha/mock/index.html'
+const PORT = 3000
+const PORT2 = 3001
 
-const staticServer = new StaticServer(3000)
+const mockPageUrl = `http://127.0.0.1:${PORT}/mock/index.html`
+const mockPageUrl2 = `http://127.0.0.1:${PORT2}/mocha/mock/index.html`
+const _404PageUrl = `http://127.0.0.1:${PORT2}/404`
+
+const staticServer = new StaticServer(PORT, __dirname)
+const staticServer2 = new StaticServer(PORT2)
 
 before(async () => {
 	global.expect = expect
@@ -30,7 +36,7 @@ before(async () => {
 	})
 	
 	// noinspection JSCheckFunctionSignatures
-	await Promise.all([staticServer.listen(), launchPuppeteerPromise])
+	await Promise.all([staticServer.listen(), staticServer2.listen(), launchPuppeteerPromise])
 })
 
 describe('End-to-end tests using puppeteer', () => {
@@ -60,11 +66,15 @@ describe('End-to-end tests using puppeteer', () => {
 			'100px',
 		])
 		
+		// To cover other things:
+		expect((await page.goto(mockPageUrl2)).status()).to.equal(200)
+		expect((await page.goto(_404PageUrl)).status()).to.equal(404)
+		
 		expect(errors).to.be.empty
 	})
 })
 
 after(async () => {
 	// noinspection JSCheckFunctionSignatures
-	await Promise.all([browser.close(), staticServer.shutdown()])
+	await Promise.all([browser.close(), staticServer2.shutdown(), staticServer.shutdown()])
 })
