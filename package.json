@@ -7,14 +7,43 @@
     "serve": "dist/main.umd.js"
   },
   "scripts": {
-    "test:e2e": "mocha --config .mocharc.json",
-    "prepublishOnly": "npm run build:prod && npm run test:e2e",
+    "test:e2e": "mocha",
+    "pretest:e2e:coverage": "rimraf coverage",
+    "test:e2e:coverage": "nyc npm run test:e2e",
+    "test:e2e:prod": "npm run test:e2e:coverage -- --cache false",
+    "prepublishOnly": "npm run build:prod && npm run test:e2e:prod",
     "prebuild": "rimraf dist",
     "build": "rollup --config",
     "build:ugligy": "npm run build -- --environment UGLIFY",
     "build:watch": "npm run build -- --watch",
     "build:prod": "npm run build -- --environment BUILD:production",
     "build:prod0": "npm run build -- --environment BUILD:production,UGLIFY:false"
+  },
+  "mocha": {
+    "diff": true,
+    "extension": ["js"],
+    "spec": "./mocha/**/*.spec.js",
+    "reporter": "spec",
+    "timeout": 2000
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*{.,-}{test,spec}.{t,j}s"
+    ],
+    "reporter": [
+      "text",
+      "lcov"
+    ],
+    "check-coverage": true,
+    "branches": 90,
+    "functions": 90,
+    "lines": 90,
+    "statements": 90,
+	 "temp-dir": "./coverage/.nyc_output"
   },
   "repository": {
     "type": "git",
@@ -54,6 +83,7 @@
     "lodash.camelcase": "^4.3.0",
     "lodash.snakecase": "^4.1.1",
     "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
     "puppeteer": "~1.17.0",
     "rimraf": "^2.6.3",
     "rollup": "^1.12.2",
