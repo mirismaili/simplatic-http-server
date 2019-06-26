@@ -44,8 +44,12 @@ describe('End-to-end tests using puppeteer', () => {
 		page.on('pageerror', handler)
 		page.on('error', handler)
 		
-		await page.goto(mockPageUrl)
+		const response = await page.goto(mockPageUrl)
 		
+		expect(response.status()).to.equal(200)
+		
+		expect(response.headers()['content-type']).to.equal('text/html')
+
 		expect(await page.title()).to.equal('Mock HTML')
 		
 		expect(await page.evaluate(() => [
