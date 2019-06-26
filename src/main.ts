@@ -12,20 +12,15 @@ export default class StaticServer {
 	
 	constructor(public readonly port: number, public readonly servePath = '') {
 		this.staticServer = http.createServer((req, res) => {
-			console.debug(req.method + ' ' + req.url)
+			//console.debug(req.method + ' ' + req.url)
 			
 			try {
 				const uri = url.parse(req.url!).pathname!
 				let filePath = path.join(servePath === '' ? process.cwd() : servePath, uri)!
 				
 				e404:{
-					if (!fs.existsSync(filePath)) break e404
-					console.debug(filePath)
-					
-					if (fs.statSync(filePath).isDirectory()) filePath = path.join(filePath, 'index.html')
-					console.debug(filePath)
-					
-					if (!fs.existsSync(filePath)) break e404
+					if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) break e404
+					//console.debug(filePath)
 					
 					const contentTypesByExtension: { [key: string]: string } = {
 						'.html': 'text/html',
@@ -46,8 +41,8 @@ export default class StaticServer {
 				}
 				//----------------------------------------------------------/e404:
 				
+				//console.error(`File not found: "${filePath}"`)
 				// noinspection UnreachableCodeJS
-				console.error(`File not found: "${filePath}"`)
 				res.writeHead(404, {'Content-Type': 'text/plain'})
 				res.write('404/ Not Found\n')
 				res.end()
