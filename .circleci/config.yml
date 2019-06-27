@@ -1,0 +1,69 @@
+# `XX` means "false", "forbidden", "disabled", etc
+# `YY` means "yes", "true", "force", etc
+
+version: 2.1
+jobs:
+  e2e_test_latest:
+    docker:
+      - image: circleci/node:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - run: echo 'export PATH=~/repo/node_modules/.bin:$PATH' >> $BASH_ENV
+
+      - checkout
+
+      - run: npm ci
+
+      # Puppeteer Debian dependencies (https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix):
+      #- run: sudo ldd /home/circleci/repo/node_modules/puppeteer/.local-chromium/linux-662092/chrome-linux/chrome | grep not
+      - run:
+          name: Install puppeteer dependencies
+          command: sudo apt-get install -y libxtst6 libnss3 libnspr4 libxss1 libasound2 libatk-bridge2.0-0 libgtk-3-0 libgdk-pixbuf2.0-0
+
+      - run:
+          name: Build and Test (e2e)
+
+          command: |
+            npm run build:prod
+            npm run test:e2e:prod
+
+  e2e_test_lts:
+    docker:
+      - image: circleci/node:lts
+
+    working_directory: ~/repo
+
+    steps:
+      - run: echo 'export PATH=~/repo/node_modules/.bin:$PATH' >> $BASH_ENV
+
+      - checkout
+
+      - run: npm ci
+
+      # Puppeteer Debian dependencies (https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix):
+      #- run: sudo ldd /home/circleci/repo/node_modules/puppeteer/.local-chromium/linux-662092/chrome-linux/chrome | grep not
+      - run:
+          name: Install puppeteer dependencies
+          command: sudo apt-get install -y libxtst6 libnss3 libnspr4 libxss1 libasound2 libatk-bridge2.0-0 libgtk-3-0 libgdk-pixbuf2.0-0
+
+      - run:
+          name: Build and Test (e2e) and Report coverage
+
+          command: |
+            echo $PATH
+            npm run build:prod
+            npm run test:e2e:prod
+            if [[ $COVERALLS != XX ]]; then
+              npm i -D coveralls && (nyc report --reporter=text-lcov | coveralls);
+            else
+              echo COVERALLS IS DISABLED;
+            fi
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - e2e_test_latest
+      - e2e_test_lts

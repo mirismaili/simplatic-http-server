@@ -24,7 +24,7 @@
     "extension": "js",
     "spec": "./mocha/**/*.spec.js",
     "reporter": "spec",
-    "timeout": 2000
+    "timeout": 4000
   },
   "nyc": {
     "extension": [

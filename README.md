@@ -9,6 +9,12 @@
 		<img src="https://packagephobia.now.sh/badge?p=simplatic-http-server" alt="install size">
 	</a>
 	<br>
+	<a href="https://circleci.com/gh/mirismaili/simplatic-http-server">
+		<img src="https://circleci.com/gh/mirismaili/simplatic-http-server.svg?style=svg">
+	</a>
+	<a href='https://coveralls.io/github/mirismaili/simplatic-http-server?branch=master'>
+		<img src='https://coveralls.io/repos/github/mirismaili/simplatic-http-server/badge.svg?branch=master' alt='Coverage Status' />
+	</a>
 	<a href="https://david-dm.org/mirismaili/simplatic-http-server">
 		<img src="https://david-dm.org/mirismaili/simplatic-http-server.svg" alt="Dependency Status">
 	</a>
