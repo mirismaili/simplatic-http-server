@@ -1,0 +1,12 @@
+{
+	"plugins": [
+		"@semantic-release/commit-analyzer",
+		"@semantic-release/release-notes-generator",
+		["@semantic-release/github", {
+			"assets": [
+				{"path": "dist/main.umd.js", "label": "main.umd.js - This is the one has been published on npm.js and you can install it with [npm install ...]."},
+				{"path": "dist/main.umd.js.map", "label": "main.umd.js.map"}
+			]
+		}]
+	]
+}
