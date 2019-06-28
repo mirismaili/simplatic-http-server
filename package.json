@@ -1,6 +1,6 @@
 {
   "name": "simplatic-http-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A very light-weight and very simple static HTTP server based on node's built-in http module",
   "main": "dist/main.umd.js",
   "bin": {
@@ -47,7 +47,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mirismaili/text-wrapper.git"
+    "url": "https://github.com/mirismaili/simplatic-http-server.git"
   },
   "keywords": [
     "simple-static-http-server",
@@ -61,12 +61,12 @@
     "server",
     "http",
     "promise",
-    "dev4dev"
+    "library"
   ],
   "author": "S. M. Mir-Ismaili <s.m.mirismaili@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mirismaili/text-wrapper/issues"
+    "url": "https://github.com/mirismaili/simplatic-http-server/issues"
   },
   "prettier": {
     "semi": false,
