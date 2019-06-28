@@ -6,7 +6,9 @@
 
 const puppeteer = require('puppeteer')
 const {expect} = require('chai')
-const StaticServer = require('../dist/main.umd.js')
+const StaticServer = require('../dist/main.umd.js').default
+// const staticServerDebug = require('../dist/main.umd.js').debug
+// staticServerDebug.enable('simplatic-http-server:IIIWE*')
 
 const PORT = 3000
 const PORT2 = 3001
@@ -35,7 +37,6 @@ before(async () => {
 		}, reject)
 	})
 	
-	// noinspection JSCheckFunctionSignatures
 	await Promise.all([staticServer.listen(), staticServer2.listen(), launchPuppeteerPromise])
 })
 
@@ -75,6 +76,5 @@ describe('End-to-end tests using puppeteer', () => {
 })
 
 after(async () => {
-	// noinspection JSCheckFunctionSignatures
 	await Promise.all([browser.close(), staticServer2.shutdown(), staticServer.shutdown()])
 })

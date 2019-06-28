@@ -6,6 +6,7 @@ import sourceMaps from 'rollup-plugin-sourcemaps'
 import {terser} from 'rollup-plugin-terser'
 import typescript from 'rollup-plugin-typescript2'
 import builtins from 'builtin-modules/static'
+import replace from 'rollup-plugin-replace'
 
 const pkg = require('./package.json')
 
@@ -17,7 +18,7 @@ const uglify = process.env.UGLIFY
 
 // https://stackoverflow.com/a/56114625/5318303
 
-const externals = [...builtins, ...Object.keys(pkg.dependencies || {})]
+const externals = [...builtins, ...Object.keys(pkg.dependencies)]
 
 const globals = {}
 externals.map(key => globals[key] = /[-.]/.test(key) ? camelCase(key) : key)
@@ -25,12 +26,21 @@ externals.map(key => globals[key] = /[-.]/.test(key) ? camelCase(key) : key)
 // noinspection JSUnusedGlobalSymbols
 export default {
 	input: `src/main.ts`,
-	output: {format: 'umd', file: pkg.main, name: libVarName, sourcemap: true, globals: globals},
+	output: {format: 'umd', file: pkg.main, name: libVarName, sourcemap: true, exports: 'named', globals: globals},
 	watch: {include: 'src/**'},
 
 	external: externals,
 	
 	plugins: [
+		replace({
+			include: [
+				'src/**/*.ts',
+			],
+			delimiters: ['<@', '@>'],
+			values: {
+				MODULE_NAME: libraryName, //JSON.stringify(libraryName)
+			},
+		}),
 		commonjs(),
 		typescript({
 			useTsconfigDeclarationDir: true,

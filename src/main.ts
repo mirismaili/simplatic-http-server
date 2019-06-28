@@ -3,6 +3,8 @@ import path from 'path'
 import url from 'url'
 import http from 'http'
 
+import debug from 'debug'
+
 /**
  * Created at 1398/4/2 (2019/6/23).
  * @author {@link https://mirismaili.github.io S. Mahdi Mir-Ismaili}
@@ -12,45 +14,40 @@ export default class StaticServer {
 	
 	constructor(public readonly port: number, public readonly servePath = '') {
 		this.staticServer = http.createServer((req, res) => {
-			//console.debug(req.method + ' ' + req.url)
+			dbg('%s %s', req.method, req.url)
 			
 			try {
 				const uri = url.parse(req.url!).pathname!
 				let filePath = path.join(servePath === '' ? process.cwd() : servePath, uri)!
 				
-				e404:{
-					if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) break e404
-					//console.debug(filePath)
-					
-					const contentTypesByExtension: { [key: string]: string } = {
-						'.html': 'text/html',
-						'.css': 'text/css',
-						'.js': 'text/javascript'
-					}
-					
-					const data = fs.readFileSync(filePath, 'binary')
-					
-					const headers: { [key: string]: string } = {}
-					const contentType = contentTypesByExtension[path.extname(filePath)]
-					if (contentType !== undefined) headers['Content-Type'] = contentType
-					res.writeHead(200, headers)
-					res.write(data, 'binary')
+				if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) { // 404:
+					err('File not found: %s', filePath)
+					res.writeHead(404, {'Content-Type': 'text/plain'})
+					res.write('404/ Not Found\n')
 					res.end()
-					
 					return
 				}
-				//----------------------------------------------------------/e404:
 				
-				//console.error(`File not found: "${filePath}"`)
-				// noinspection UnreachableCodeJS
-				res.writeHead(404, {'Content-Type': 'text/plain'})
-				res.write('404/ Not Found\n')
+				dbg(filePath)
+				
+				const contentTypesByExtension: { [key: string]: string } = {
+					'.html': 'text/html',
+					'.css': 'text/css',
+					'.js': 'text/javascript'
+				}
+				
+				const data = fs.readFileSync(filePath, 'binary')
+				
+				const headers: { [key: string]: string } = {}
+				const contentType = contentTypesByExtension[path.extname(filePath)]
+				if (contentType !== undefined) headers['Content-Type'] = contentType
+				res.writeHead(200, headers)
+				res.write(data, 'binary')
 				res.end()
-				
-			} catch (exeption) {
-				console.error(exeption.stack)
+			} catch (exception) {
+				console.error(exception.stack)
 				res.writeHead(500, {'Content-Type': 'text/plain'})
-				res.write(exeption.toString())
+				res.write(exception.toString())
 				res.end()
 			}
 		})
@@ -71,3 +68,20 @@ export default class StaticServer {
 		)
 	}
 }
+//*****************************************************************************************/
+
+const getDebugger = (namespace: string): debug.Debugger => debug(`<@MODULE_NAME@>:${namespace}`)
+
+const trc = getDebugger('I')
+const dbg = getDebugger('II')
+const inf = getDebugger('III')
+const wrn = getDebugger('IIIW')
+const err = getDebugger('IIIWE')
+const ftl = getDebugger('IIIWEF')
+const log = getDebugger('II')     // Default level
+
+//debug.log = console.debug.bind(console)
+
+//debug.formatters.c = (f: () => string) => f()
+
+export {debug}
