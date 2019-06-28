@@ -19,6 +19,7 @@ const _404PageUrl = `http://127.0.0.1:${PORT2}/404`
 
 const staticServer = new StaticServer(PORT, __dirname)
 const staticServer2 = new StaticServer(PORT2)
+const staticServerErr = new StaticServer(PORT)
 
 before(async () => {
 	global.expect = expect
@@ -40,6 +41,22 @@ before(async () => {
 	await Promise.all([staticServer.listen(), staticServer2.listen(), launchPuppeteerPromise])
 })
 
+describe('Error handling functionality', () => {
+	it("Multiple `listen()` invocation", (done) => {
+		staticServer.listen().then(() => expect(true).to.be.false, err => {
+			expect(err.toString()).to.include('ERR_SERVER_ALREADY_LISTEN')
+			done()
+		})
+	})
+	
+	it("Listen to a busy port", (done) => {
+		staticServerErr.listen().then(() => expect(true).to.be.false, err => {
+			expect(err.toString()).to.include(`EADDRINUSE`)
+			done()
+		})
+	})
+})
+
 describe('End-to-end tests using puppeteer', () => {
 	it('Should load mock page as expected and without any error', async () => {
 		const page = (await browser.pages())[0];
@@ -56,7 +73,7 @@ describe('End-to-end tests using puppeteer', () => {
 		expect(response.status()).to.equal(200)
 		
 		expect(response.headers()['content-type']).to.equal('text/html')
-
+		
 		expect(await page.title()).to.equal('Mock HTML')
 		
 		expect(await page.evaluate(() => [
