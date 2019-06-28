@@ -12,13 +12,13 @@ import debug from 'debug'
 export default class StaticServer {
 	readonly staticServer: http.Server
 	
-	constructor(public readonly port: number, public readonly servePath = '') {
+	constructor(public readonly port: number, public readonly servePath = process.cwd()) {
 		this.staticServer = http.createServer((req, res) => {
 			dbg('%s %s', req.method, req.url)
 			
 			try {
 				const uri = url.parse(req.url!).pathname!
-				let filePath = path.join(servePath === '' ? process.cwd() : servePath, uri)!
+				const filePath = path.join(servePath, uri)!
 				
 				if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) { // 404:
 					err('File not found: %s', filePath)
@@ -57,7 +57,7 @@ export default class StaticServer {
 		return new Promise((resolve, reject) => {
 					this.staticServer.on('error', reject)
 					
-					this.staticServer.listen(this.port, () => resolve())
+					this.staticServer.listen(this.port, resolve)
 				}
 		)
 	}
@@ -72,13 +72,14 @@ export default class StaticServer {
 
 const getDebugger = (namespace: string): debug.Debugger => debug(`<@MODULE_NAME@>:${namespace}`)
 
-const trc = getDebugger('I')
-const dbg = getDebugger('II')
-const inf = getDebugger('III')
-const wrn = getDebugger('IIIW')
-const err = getDebugger('IIIWE')
-const ftl = getDebugger('IIIWEF')
-const log = getDebugger('II')     // Default level
+const trc = getDebugger('I')       // I*: Level I:    Trace+
+const dbg = getDebugger('II')      // II*: Level II:   Debug+
+const inf = getDebugger('III')     // III*: Level III:  Info+
+const wrn = getDebugger('IIIW')    // IIIW*: Level IV:   Warning+
+const err = getDebugger('IIIWE')   // IIIWE*: Level V:    Error+
+const ftl = getDebugger('IIIWEF')  // IIIWEF : Level VI:   Fatal
+
+const log = getDebugger('II')  // Default level
 
 //debug.log = console.debug.bind(console)
 
