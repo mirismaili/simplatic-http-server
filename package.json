@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A very light-weight and very simple static HTTP server based on node's built-in http module",
   "main": "dist/main.umd.js",
+  "types": "dist/types/main.d.ts",
   "scripts": {
     "test:e2e": "mocha",
     "pretest:e2e:coverage": "rimraf coverage",
