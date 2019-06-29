@@ -5,6 +5,7 @@ import http from 'http'
 
 import debug from 'debug'
 
+// noinspection JSUnusedGlobalSymbols
 /**
  * Created at 1398/4/2 (2019/6/23).
  * @author {@link https://mirismaili.github.io S. Mahdi Mir-Ismaili}
@@ -53,18 +54,32 @@ export default class StaticServer {
 		})
 	}
 	
-	listen(): Promise<void> {
+	// noinspection JSUnusedGlobalSymbols
+	listen(onListen: () => void = () => {}, onError: (err: Error) => void = () => {}): Promise<void> {
 		return new Promise((resolve, reject) => {
-					this.staticServer.on('error', reject)
-					
-					this.staticServer.listen(this.port, resolve)
-				}
-		)
+			try {
+				this.staticServer.on('error', err => {
+					onError(err)
+					reject(err)
+				})
+				
+				this.staticServer.listen(this.port, () => {
+					onListen()
+					resolve()
+				})
+			} catch (err) {
+				onError(err)
+				reject(err)
+			}
+		})
 	}
 	
-	shutdown(): Promise<void> {
+	shutdown(callback: (err?: Error) => void = () => {}): Promise<void> {
 		return new Promise((resolve, reject) =>
-				this.staticServer.close(err => err === undefined ? resolve() : reject(err))
+				this.staticServer.close(err => {
+					callback(err)
+					err === undefined ? resolve() : reject(err)
+				})
 		)
 	}
 }

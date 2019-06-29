@@ -69,10 +69,11 @@ npm install simplatic-http-server
 	const staticServer = new StaticServer(portNumber /*, servePath = process.cwd() */) 
 	```
 	
-3. Listen to a port:
+3. Listen to `portNumber`:
 
 	```js
-	await staticServer.listen()
+	await staticServer.listen(/* onListenCallback, onErrorCallback */)
+
 	console.log(`The static server listening on ${portNumber} ...`)
 	```
 	
@@ -85,10 +86,10 @@ npm install simplatic-http-server
 	)
 	```
 	
-4. Get access to a file in `servePath`. E. g: type in your browser's address bar: `http://127.0.0.1/dir/index.html`. *Note: The path of `index.html` must be `` `${servePath}/dir/index.html` `` on your local machine.*
+4. Get access to a file in `servePath`. E. g. type in your browser's address bar: `http://127.0.0.1/dir/index.html` *(Note: The path of `index.html` must be `` `${servePath}/dir/index.html` `` on your local machine).*
 
 5. Turn it off when no more needed:
 
 	```js
-	await staticServer.shutdown()
+	await staticServer.shutdown(/* callback */)
 	```
