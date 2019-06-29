@@ -9,13 +9,13 @@
     "pretest:e2e:coverage": "rimraf coverage",
     "test:e2e:coverage": "nyc npm run test:e2e",
     "test:e2e:prod": "npm run test:e2e:coverage -- --cache false",
-    "prepublishOnly": "npm run build:prod && npm run test:e2e:prod",
     "prebuild": "rimraf dist",
     "build": "rollup --config",
     "build:ugligy": "npm run build -- --environment UGLIFY",
     "build:watch": "npm run build -- --watch",
     "build:prod": "npm run build -- --environment BUILD:production",
-    "build:prod0": "npm run build -- --environment BUILD:production,UGLIFY:false"
+    "build:prod0": "npm run build -- --environment BUILD:production,UGLIFY:false",
+    "prepublishOnly": "npm run build:prod -- --environment UGLIFY:false && npm run test:e2e:prod"
   },
   "mocha": {
     "diff": true,

@@ -53,13 +53,13 @@ jobs:
 
           command: |
             echo $PATH
-            npm run build:prod
-            npm run test:e2e:prod
+            npm run prepublishOnly
             if [[ $COVERALLS != XX ]]; then
               nyc report --reporter=text-lcov | npx coveralls;
             else
               echo COVERALLS IS DISABLED;
             fi
+            npm run build:prod
             npx semantic-release
 
 workflows:
