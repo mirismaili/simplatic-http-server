@@ -10,8 +10,9 @@ const StaticServer = require('../dist/main.umd.js').default
 // const staticServerDebug = require('../dist/main.umd.js').debug
 // staticServerDebug.enable('simplatic-http-server:IIIWE*')
 
-const PORT = 3000
-const PORT2 = 3001
+const PORT  = 61341
+const PORT2 = 61342
+const PORT3 = 61343
 
 const mockPageUrl = `http://127.0.0.1:${PORT}/mock/index.html`
 const mockPageUrl2 = `http://127.0.0.1:${PORT2}/mocha/mock/index.html`
@@ -20,8 +21,10 @@ const _404PageUrl = `http://127.0.0.1:${PORT2}/404`
 const staticServer = new StaticServer(PORT, __dirname)
 const staticServer2 = new StaticServer(PORT2)
 const staticServerErr = new StaticServer(PORT)
+const staticServerErr2 = new StaticServer(PORT3)
 
 before(async () => {
+	// noinspection JSUndefinedPropertyAssignment
 	global.expect = expect
 	//****************************************************************************/
 	
@@ -33,27 +36,66 @@ before(async () => {
 				// 	devtools: true,
 				// }
 		).then(browser => {
+			// noinspection JSUndefinedPropertyAssignment
 			global.browser = browser
 			resolve()
 		}, reject)
 	})
 	
-	await Promise.all([staticServer.listen(), staticServer2.listen(), launchPuppeteerPromise])
+	await Promise.all([staticServer.listen(), staticServer2.listen(), launchPuppeteerPromise, staticServerErr2.listen()])
 })
 
 describe('Error handling functionality', () => {
 	it("Multiple `listen()` invocation", (done) => {
-		staticServer.listen().then(() => expect(true).to.be.false, err => {
-			expect(err.toString()).to.include('ERR_SERVER_ALREADY_LISTEN')
-			done()
-		})
+		let errStr = ''
+		
+		staticServer.listen(
+				() => expect('0. Must not reach here!').to.equal('1. Must not be able to listen!'),
+				err => errStr = err.toString()
+		).then(() => expect('0. Must not reach here!').to.equal('1. Must not be able to listen!'),
+				err => {
+					expect(err.toString()).to.equal(errStr)
+					expect(errStr).to.include('ERR_SERVER_ALREADY_LISTEN')
+					done()
+				})
 	})
 	
 	it("Listen to a busy port", (done) => {
-		staticServerErr.listen().then(() => expect(true).to.be.false, err => {
-			expect(err.toString()).to.include(`EADDRINUSE`)
-			done()
-		})
+		staticServerErr.listen(
+				() => expect('0. Must not reach here!').to.equal('1. Must not be able to listen!')
+		).then(() => expect('0. Must not reach here!').to.equal('1. Must not be able to listen!'),
+				err => {
+					expect(err.toString()).to.include('EADDRINUSE')
+					done()
+				})
+	})
+	
+	it("Try to close an un-open connection", (done) => {
+		let errStr = ''
+		
+		staticServerErr.shutdown(
+				err => errStr = err.toString()
+		).then(() => expect('0. Must not reach here!').to.equal('1. Must not be able to listen!'),
+				err => {
+					expect(err.toString()).to.equal(errStr)
+					expect(errStr).to.include('ERR_SERVER_NOT_RUNNING')
+					done()
+				})
+	})
+	
+	it("Try to close an already closed connection", (done) => {
+		let errStr = ''
+		
+		staticServerErr2.shutdown(err => expect(err).to.be.undefined).then(() =>
+				staticServerErr2.shutdown(
+						err => errStr = err.toString()
+				).then(() => expect('0. Must not reach here!').to.equal('1. Must not be able to listen!'),
+						err => {
+							expect(err.toString()).to.equal(errStr)
+							expect(errStr).to.include('ERR_SERVER_NOT_RUNNING')
+							done()
+						})
+		)
 	})
 })
 
