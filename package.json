@@ -1,6 +1,6 @@
 {
   "name": "simplatic-http-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A very light-weight and very simple static HTTP server based on node's built-in http module",
   "main": "dist/main.umd.js",
   "types": "dist/types/main.d.ts",
@@ -22,7 +22,7 @@
     "extension": "js",
     "spec": "./mocha/**/*.spec.js",
     "reporter": "spec",
-    "timeout": 4000
+    "timeout": 5000
   },
   "nyc": {
     "extension": [
@@ -90,7 +90,7 @@
     "rollup-plugin-replace": "^2.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-terser": "^5.0.0",
-    "rollup-plugin-typescript2": "^0.21.1",
+    "rollup-plugin-typescript2": "^0.22.0",
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "^8.0.1",
